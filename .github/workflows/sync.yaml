@@ -7,15 +7,15 @@ on:
     - cron: "0 */12 * * *"
   workflow_dispatch:
 env:
-  IMDB_COOKIEATMAIN: ${{ secrets.IMDB_COOKIEATMAIN }}
-  IMDB_COOKIEUBIDMAIN: ${{ secrets.IMDB_COOKIEUBIDMAIN }}
-  IMDB_LISTS: ${{ secrets.IMDB_LISTS }}
-  TRAKT_EMAIL: ${{ secrets.TRAKT_EMAIL }}
-  TRAKT_PASSWORD: ${{ secrets.TRAKT_PASSWORD }}
-  TRAKT_CLIENTID: ${{ secrets.TRAKT_CLIENTID }}
-  TRAKT_CLIENTSECRET: ${{ secrets.TRAKT_CLIENTSECRET }}
-  SYNC_SKIPHISTORY: ${{ secrets.SYNC_SKIPHISTORY }}
-  SYNC_MODE: ${{ secrets.SYNC_MODE }}
+  ITS_IMDB_COOKIEATMAIN: ${{ secrets.IMDB_COOKIEATMAIN }}
+  ITS_IMDB_COOKIEUBIDMAIN: ${{ secrets.IMDB_COOKIEUBIDMAIN }}
+  ITS_IMDB_LISTS: ${{ secrets.IMDB_LISTS }}
+  ITS_TRAKT_EMAIL: ${{ secrets.TRAKT_EMAIL }}
+  ITS_TRAKT_PASSWORD: ${{ secrets.TRAKT_PASSWORD }}
+  ITS_TRAKT_CLIENTID: ${{ secrets.TRAKT_CLIENTID }}
+  ITS_TRAKT_CLIENTSECRET: ${{ secrets.TRAKT_CLIENTSECRET }}
+  ITS_SYNC_SKIPHISTORY: ${{ secrets.SYNC_SKIPHISTORY }}
+  ITS_SYNC_MODE: ${{ secrets.SYNC_MODE }}
 jobs:
   sync:
     runs-on: ubuntu-latest
