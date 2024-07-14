@@ -1,11 +1,21 @@
 IMDB:
+    # Authentication method to be used for IMDb
+    # The value must be one of the following:
+    #   credentials - dependent fields [IMDB_EMAIL] [IMDB_PASSWORD]
+    #   cookies     - dependent fields [IMDB_COOKIEATMAIN] [IMDB_COOKIEUBIDMAIN]
+    #   none        - no dependent fields
+    AUTH: credentials
+    # IMDb account email address
+    EMAIL: user@domain.com
+    # IMDb account password
+    PASSWORD: password123
+    # The cookies can be used as a fallback if captcha is preventing the authentication flow
     # Log into your IMDb account from a web browser, inspect the cookies and retrieve the value of cookie:
     # name: at-main | domain: .imdb.com
-    # You need to replace this value with your own, the default value is for illustrative purposes only
     COOKIEATMAIN: zAta|RHiA67JIrBDPaswIym3GyrTlEuQH-u9yrKP3BUNCHgVyE4oNtUzBYVKlhjjzBiM_Z-GSVnH9rKW3Hf7LdbejovoF6SI4ZmgJcTIUXoA4NVcH1Qahwm0KYCyz95o1gsgby-uQwdU6CoS6MFTnjMkLe1puNiv4uFkvo8mOQulJJeutzYedxiUd0ns9w1X_WeVXPTZWjwisPZMw3EOR6-q9xR4kCEWRW7CmWxU1AEDQbT8ns_AJJD34w1nIQUkuLgBQrvJI_pY
+    # The cookies can be used as a fallback if captcha is preventing the authentication flow
     # Log into your IMDb account from a web browser, inspect the cookies and retrieve the value of cookie:
     # name: ubid-main | domain: .imdb.com
-    # You need to replace this value with your own, the default value is for illustrative purposes only
     COOKIEUBIDMAIN: 301-0710501-5367639
     # Array of IMDb lists that you would like synced to Trakt
     # If this array is empty, all IMDb lists will be synced to Trakt
@@ -14,18 +24,33 @@ IMDB:
     LISTS:
         - ls000000000
         - ls111111111
+    # Print tracing logs related to browser activities
+    # Can be useful for debugging purposes
+    TRACE: false
+    # Whether to run the browser in headless mode or not
+    # For local debugging you can set this value to false
+    # If running via GitHub Actions or other CI the value will always be true
+    HEADLESS: true
 SYNC:
     # Sync mode to be used when running the application
     # The value must be one of the following:
-    #   full     - sync all IMDb items by adding, deleting and updating Trakt resources
-    #   add-only - sync only newly added IMDb items to Trakt
-    #   dry-run  - identify what IMDb items would be added, deleted or updated on Trakt
-    MODE: full
-    # Whether to skip history sync or not. If set to true, history sync will be skipped
-    # IMDb doesn't offer functionality similar to Trakt history, hence why there can't be a direct mapping between them
-    # The syncer will assume you have watched an item if you've submitted a rating for it
-    # If the above is satisfied and your history for this item is empty, then a new history entry will be added...
-    SKIPHISTORY: true
+    #   full     - add Trakt items that do not exist, delete Trakt items that do not exist on IMDb, update Trakt items by treating IMDb as the source of truth
+    #   add-only - add Trakt items that do not exist, but do not delete anything
+    #   dry-run  - identify what Trakt items would be added / deleted / updated
+    MODE: dry-run
+    # Whether to sync history or not. If set to true, history will be synced
+    # When IMDB_AUTH is none, history will be ignored
+    HISTORY: false
+    # Whether to sync ratings or not. If set to true, ratings will be synced
+    # When IMDB_AUTH is none, ratings will be ignored
+    RATINGS: false
+    # Whether to watchlist or not. If set to true, watchlist will be synced
+    # When IMDB_AUTH is none, watchlist will be ignored
+    WATCHLIST: false
+    # Maximum duration to run the syncer
+    # Users with large IMDb/Trakt libraries might have to increase the timeout value accordingly
+    # Valid time units are: ns, us (or µs), ms, s, m, h
+    TIMEOUT: 10m
 TRAKT:
     # Trakt app client ID
     # You need to replace this value with your own, the default value is for illustrative purposes only
@@ -38,4 +63,4 @@ TRAKT:
     EMAIL: user@domain.com
     # Trakt account password
     # You need to replace this value with your own, the default value is for illustrative purposes only
-    PASSWORD: password
+    PASSWORD: password123

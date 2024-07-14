@@ -7,25 +7,37 @@ on:
     - cron: "0 */12 * * *"
   workflow_dispatch:
 env:
+  ITS_IMDB_AUTH: ${{ secrets.IMDB_AUTH }}
+  ITS_IMDB_EMAIL: ${{ secrets.IMDB_EMAIL }}
+  ITS_IMDB_PASSWORD: ${{ secrets.IMDB_PASSWORD }}
   ITS_IMDB_COOKIEATMAIN: ${{ secrets.IMDB_COOKIEATMAIN }}
   ITS_IMDB_COOKIEUBIDMAIN: ${{ secrets.IMDB_COOKIEUBIDMAIN }}
   ITS_IMDB_LISTS: ${{ secrets.IMDB_LISTS }}
-  ITS_TRAKT_EMAIL: ${{ secrets.TRAKT_EMAIL }}
-  ITS_TRAKT_PASSWORD: ${{ secrets.TRAKT_PASSWORD }}
+  ITS_IMDB_TRACE: ${{ secrets.IMDB_TRACE }}
+  ITS_IMDB_HEADLESS: true
+  ITS_SYNC_MODE: ${{ secrets.SYNC_MODE }}
+  ITS_SYNC_HISTORY: ${{ secrets.SYNC_HISTORY }}
+  ITS_SYNC_RATINGS: ${{ secrets.SYNC_RATINGS }}
+  ITS_SYNC_WATCHLIST: ${{ secrets.SYNC_WATCHLIST }}
+  ITS_SYNC_TIMEOUT: ${{ secrets.SYNC_TIMEOUT }}
   ITS_TRAKT_CLIENTID: ${{ secrets.TRAKT_CLIENTID }}
   ITS_TRAKT_CLIENTSECRET: ${{ secrets.TRAKT_CLIENTSECRET }}
-  ITS_SYNC_SKIPHISTORY: ${{ secrets.SYNC_SKIPHISTORY }}
-  ITS_SYNC_MODE: ${{ secrets.SYNC_MODE }}
+  ITS_TRAKT_EMAIL: ${{ secrets.TRAKT_EMAIL }}
+  ITS_TRAKT_PASSWORD: ${{ secrets.TRAKT_PASSWORD }}
 jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
+      - name: Install Google Chrome
+        run: |
+          wget -qO google-chrome-stable.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo dpkg --install google-chrome-stable.deb
       - name: Check out code
         uses: actions/checkout@v4
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
-          go-version: 1.21
+          go-version: 1.22.2
       - name: Build
         run: make build
       - name: Sync
