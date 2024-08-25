@@ -35,13 +35,13 @@ type TraktClientInterface interface {
 	ListItemsAdd(listID string, items entities.TraktItems) error
 	ListItemsRemove(listID string, items entities.TraktItems) error
 	ListAdd(listID, listName string) error
-	ListRemove(listID string) error
 	RatingsGet() (entities.TraktItems, error)
 	RatingsAdd(items entities.TraktItems) error
 	RatingsRemove(items entities.TraktItems) error
 	HistoryGet(itemType, itemID string) (entities.TraktItems, error)
 	HistoryAdd(items entities.TraktItems) error
 	HistoryRemove(items entities.TraktItems) error
+	UserInfoGet() (*entities.TraktUserInfo, error)
 }
 
 type requestFields struct {
@@ -77,6 +77,18 @@ func (r reusableReader) Read(p []byte) (int, error) {
 	return n, err
 }
 
+func selectorExists(body io.ReadCloser, selector string) error {
+	defer body.Close()
+	doc, err := goquery.NewDocumentFromReader(body)
+	if err != nil {
+		return fmt.Errorf("failure creating goquery document from response: %w", err)
+	}
+	if doc.Find(selector).Length() == 0 {
+		return fmt.Errorf("failure finding selector %s", selector)
+	}
+	return nil
+}
+
 func selectorAttributeScrape(body io.ReadCloser, selector, attribute string) (*string, error) {
 	defer body.Close()
 	doc, err := goquery.NewDocumentFromReader(body)
@@ -107,4 +119,8 @@ type TraktListNotFoundError struct {
 
 func (e *TraktListNotFoundError) Error() string {
 	return fmt.Sprintf("list with id %s could not be found", e.Slug)
+}
+
+func pointer[T any](v T) *T {
+	return &v
 }
